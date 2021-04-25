@@ -103,7 +103,7 @@ def mars_facts():
     df.set_index('description', inplace=True)
 
     # make the dataFrame back into HTML
-    return df.to_html()
+    return df.to_html(classes ="table table-striped")
 
 if __name__ == "__main__":
     # If running as script, print scraped data
