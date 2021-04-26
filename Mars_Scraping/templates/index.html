@@ -14,12 +14,12 @@
         <div class="jumbotron text-center"></div>
         <h1>Mission to Mars</h1>
         <!---create a large primary colored button with bootstrap, then link to our scrape webpage-->
-        <p><a class="btn btn-primary btn-lg" href="/scrape"
+        <p><a class="btn btn-dark btn-lng" href="/scrape"
                     role="button">Scrape New Data</a></p>
     </div>
     <!-- Mars News -->
     <div class="row" id="mars-news">
-        <div class="col-md-12">
+        <div class="col-md-12 col-xs-12">
             <div class="media">
                 <div class="media-body">
                     <!--show latest mars article title-->
@@ -37,21 +37,64 @@
     <div class="row" id="mars-featured-image">
         <!--8 columns only because the other 4 will be used for the mars fact chart...we want these next to eachother-->
          <!-- Second level -->
-        <div class="col-md-8">
+        <div class="col-md-8 col-xs-12">
             <h2>Featured Mars Image</h2>
             <img 
-                src="{{ mars.featured_image }}" 
+                src="{{ mars.featured_image}}" 
                 class="img-responsive" 
                 alt="Responsive image"
             >
         </div>
         <!-- Mars Facts -->
-        <div class="col-md-4">
+        <div class="col-md-4 col-xs-6">
             <div class="row" id="mars-facts">
                 <h4>Mars Facts</h4>
                 {{ mars.facts | safe }}
             </div>
         </div>
     </div>
+    <!-- Mars Hemispheres -->
+    <br></br>
+    <div class="row">
+        <div class="col-sm-9">
+            <h2>Mars Hemispheres</h2>
+                <div class="row" id="mars-hemi-img">
+                    <div class="col-md-6 col-xs-8">
+                        <h4>{{mars.mars_cerebrus_title}}</h4>
+                        <img 
+                            src="{{ mars.mars_cerebrus_url}}" 
+                            class="img-responsive" 
+                            alt="Responsive image"
+                        >
+                    </div>
+                    <div class="col-md-6 col-xs-8">
+                        <h4>{{mars.mars_schiaparelli_title}}</h4>
+                        <img 
+                            src="{{ mars.mars_schiaparelli_url}}" 
+                            class="img-responsive" 
+                            alt="Responsive image"
+                        >
+                    </div>
+                </div>
+                <div class="row" id="mars-hemi-img-2">
+                    <div class="col-md-6 col-xs-8">
+                        <h4>{{mars.mars_syrtis_major_title}}</h4>
+                        <img 
+                            src="{{ mars.mars_syrtis_major_url}}" 
+                            class="img-responsive" 
+                            alt="Responsive image"
+                        >
+                    </div>
+                    <div class="col-md-6 col-xs-8">
+                        <h4>{{mars.mars_valles_marineris_title}}</h4>
+                        <img 
+                            src="{{ mars.mars_valles_marineris_url}}" 
+                            class="img-responsive" 
+                            alt="Responsive image"
+                        >
+                    </div>
+                </div>
+        </div> 
+    </div>    
 </body>
 </html>

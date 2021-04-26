@@ -13,13 +13,22 @@ def scrape_all():
 
 # Run all scraping functions and store results in dictionary
     news_title, news_paragraph = mars_news(browser)
+
     data = {
       "news_title": news_title,
       "news_paragraph": news_paragraph,
       "featured_image": featured_image(browser),
       "facts": mars_facts(),
-      "last_modified": dt.datetime.now()
-        }
+      "last_modified": dt.datetime.now(),
+      "mars_cerebrus_url": mars_hemi_img(browser)[0]['img_url'],
+      "mars_cerebrus_title": mars_hemi_img(browser)[0]['title'],
+      "mars_schiaparelli_url": mars_hemi_img(browser)[1]['img_url'],
+      "mars_schiaparelli_title": mars_hemi_img(browser)[1]['title'],
+      "mars_syrtis_major_url": mars_hemi_img(browser)[2]['img_url'],
+      "mars_syrtis_major_title": mars_hemi_img(browser)[2]['title'],
+      "mars_valles_marineris_url": mars_hemi_img(browser)[3]['img_url'],
+      "mars_valles_marineris_title": mars_hemi_img(browser)[3]['title']
+    }
 
     # quit the browser amd return data
     browser.quit()
@@ -104,6 +113,59 @@ def mars_facts():
 
     # make the dataFrame back into HTML
     return df.to_html(classes ="table table-striped")
+
+
+### Mars hemisphere images scraping
+def mars_hemi_img(brow):
+
+    # Initiate headless driver for deployment
+    executable_path = {'executable_path': ChromeDriverManager().install()}
+    browser = Browser('chrome', **executable_path, headless=True)
+
+     # Use browser to visit the URL 
+    url = 'https://data-class-mars-hemispheres.s3.amazonaws.com/Mars_Hemispheres/index.html'
+    browser.visit(url)
+    
+    # Create a list to hold the images and titles.
+    hemisphere_image_urls = []
+
+    # Write code to retrieve the image urls and titles for each hemisphere.
+    
+    # get titles
+    html = browser.html
+    test_soup = soup(html, 'html.parser')
+    # slide_element = test_soup.select_one('img')
+    image_title = test_soup.find_all('h3')
+    for title in image_title:
+        title = title.get_text()
+        if title != 'Back':
+            hemi_dict = {}
+            hemi_dict['title'] = title
+            hemisphere_image_urls.append(hemi_dict)
+    
+    # set counter for image urls loop
+    counter = 0
+    
+    for t in range (0,4):
+        
+        browser.visit(url)
+
+        hemi_image_elem = browser.find_by_tag('h3')[t]
+        hemi_image_elem.click()
+        
+        html = browser.html
+        img_soup = soup(html, 'html.parser')
+        a_tags_img_soup = img_soup.find_all('a')
+        
+        for tag in a_tags_img_soup:
+            if tag.get_text() == 'Sample':
+                href_img = tag['href']
+                img_url = f'https://data-class-mars-hemispheres.s3.amazonaws.com/Mars_Hemispheres/{href_img}'
+                hemisphere_image_urls[counter]['img_url'] = img_url
+                counter += 1
+                
+    return hemisphere_image_urls
+
 
 if __name__ == "__main__":
     # If running as script, print scraped data
